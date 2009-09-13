@@ -52,26 +52,84 @@
     specAfterEach();
   };
 
-  var specFail = function() {
+  var specFail = function(message) {
     print("F");
-    specFailures.push(specStack.join(" "));
+    specFailures.push(specStack.join(" ") + "\n" + message);
   };
 
   var specPass = function() {
     print(".");
   };
 
+  var inspectObject = function(obj) {
+    if(obj === null) return "null";
+    var elements = [];
+    for(property in obj) {
+      elements.push([property, inspect(obj[property])].join(":"));
+    }
+    return "{" + elements.join(",") + "}";
+  };
+
+  var inspectArray = function(arr) {
+    var elements = [];
+    for(i = 0; i < arr.length; i++) {
+      elements.push(inspect(arr[i]));
+    }
+    return "[" + elements.join(",") + "]";
+  };
+
+  var inspectDate = function(date) {
+    return date.toString();
+  };
+
+  var inspectString = function(str) {
+    return '"' + str + '"';
+  };
+
+  var inspectBoolean = function(bool) {
+    return bool;
+  };
+
+  var inspectNumber = function(num) {
+    return num;
+  };
+
+  var inspect = function(element) {
+    switch(typeof(element)) {
+    case "object":
+      if(element instanceof Array) {
+        return inspectArray(element);
+      } else if (element instanceof Date) {
+        return inspectDate(element);
+      } else {
+        return inspectObject(element);
+      }
+      break;
+    case "string":
+      return inspectString(element);
+      break;
+    case "number":
+      return inspectNumber(element);
+      break;
+    case "boolean":
+      return inspectBoolean(element);
+      break;
+    default:
+      return "undefined";
+    }
+  };
+
   var assert = function(value) {
-    value ? specPass() : specFail();
+    value ? specPass() : specFail("Expected " + value + " to be true");
   };
 
   var assertEqual = function(a, b) {
-    a == b ? specPass() : specFail();
+    a == b ? specPass() : specFail("Expected:\n" + inspect(a) + "\n\n" + "Found:\n" + inspect(b));
   };
 
   var assertNotEqual = function(a, b) {
-    a != b ? specPass() : specFail();
-  }
+    a != b ? specPass() : specFail("Expected:\n" + inspect(a) + "\n\nto not equal:\n" + inspect(b));
+  };
 
   var beforeEach = function(func) {
     specBeforeEach = func;
