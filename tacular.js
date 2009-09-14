@@ -115,7 +115,11 @@
       return inspectBoolean(element);
       break;
     default:
-      return "undefined";
+      if(element === undefined) {
+        return "undefined";
+      } else {
+        return element.toString();
+      }
     }
   };
 
