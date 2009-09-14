@@ -128,11 +128,13 @@
   };
 
   var assertEqual = function(a, b) {
-    a == b ? specPass() : specFail("Expected:\n" + inspect(a) + "\n\n" + "Found:\n" + inspect(b));
+    var debugA = inspect(a), debugB = inspect(b);
+    debugA == debugB ? specPass() : specFail("Expected:\n" + debugA + "\n\n" + "Found:\n" + debugB);
   };
 
   var assertNotEqual = function(a, b) {
-    a != b ? specPass() : specFail("Expected:\n" + inspect(a) + "\n\nto not equal:\n" + inspect(b));
+    var debugA = inspect(a), debugB = inspect(b);
+    debugA != debugB ? specPass() : specFail("Expected:\n" + debugA + "\n\nto not equal:\n" + debugB);
   };
 
   var beforeEach = function(func) {
