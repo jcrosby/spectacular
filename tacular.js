@@ -63,9 +63,13 @@
 
   var inspectObject = function(obj) {
     if(obj === null) return "null";
-    var elements = [];
+    var elements = [], orderedProperties = [], i;
     for(property in obj) {
-      elements.push([property, inspect(obj[property])].join(":"));
+      orderedProperties.push(property);
+    }
+    orderedProperties = orderedProperties.sort();
+    for(i = 0; i < orderedProperties.length; i++) {
+      elements.push([orderedProperties[i], inspect(obj[orderedProperties[i]])].join(":"));
     }
     return "{" + elements.join(",") + "}";
   };
