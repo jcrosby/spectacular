@@ -47,14 +47,21 @@
     specCount++;
     specStack.push(name);
     specBeforeEach();
-    func();
+    try { func(); }
+    catch(e) { if (e != 'fail') specError(e); }
     specStack.pop();
     specAfterEach();
+  };
+
+  var specError = function(message) {
+    print("E");
+    specFailures.push(specStack.join(" ") + "\n" + message);
   };
 
   var specFail = function(message) {
     print("F");
     specFailures.push(specStack.join(" ") + "\n" + message);
+    throw 'fail';
   };
 
   var specPass = function() {
