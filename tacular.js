@@ -35,17 +35,21 @@
   var specCount    = 0;
   var specStack    = [];
   var specFailures = [];
+  var specVerbose  = ARGV.join(";").match(/;=verbose/);
 
   var describe = function(name, func) {
     specStack.push(name);
+    if (specVerbose) print(name);
     specBeforeEach = specAfterEach = function() {};
     func();
+    if (specVerbose) print("\n\n");
     specStack.pop();
   };
 
   var it = function(name, func) {
     specCount++;
     specStack.push(name);
+    if (specVerbose) print("\n  "+name+" : ");
     specBeforeEach();
     try { func(); }
     catch(e) { if (e != 'fail') specError(e); }
@@ -54,18 +58,17 @@
   };
 
   var specError = function(message) {
-    print("E");
+    print(specVerbose ? "Error ("+message+") " : "E");
     specFailures.push(specStack.join(" ") + "\n" + message);
   };
 
   var specFail = function(message) {
-    print("F");
+    print(specVerbose ? "Fail " : "F");
     specFailures.push(specStack.join(" ") + "\n" + message);
-    throw 'fail';
   };
 
   var specPass = function() {
-    print(".");
+    print(specVerbose ? "Pass " : ".");
   };
 
   var inspectObject = function(obj) {
@@ -190,6 +193,7 @@
   for(i = 0; i < files.length; i++) {
     var file = files[i];
     if(file.match(/^spec/)) {
+      if (specVerbose) print(file+"\n");
       var content = node.fs.cat(specDirectory + "/" + file, "utf8").wait();
       eval(content);
     }
