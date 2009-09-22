@@ -8,6 +8,10 @@
  * 1. Place this file in your project's spec directory.
  * 2. Run with "node spec/tacular.js" to test all files beginning with the word "spec".
  *
+ * Options:
+ *
+ * "=verbose": Use verbose mode showing description, tests, and status for each spec.
+ *
  * Synopsis:
  *
  * var foo = require("../lib/foo.js"); // the file you are specing
