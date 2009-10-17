@@ -35,7 +35,7 @@
  * Copyright 2009, Jon Crosby, MIT Licensed
  *
  */
-include('/utils.js');
+node.mixin(process, require('/utils.js'));
 
 (function() {
   var specCount    = 0;
