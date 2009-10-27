@@ -92,6 +92,7 @@ node.mixin(process, require('/utils.js'));
 
   var inspectArray = function(arr) {
     var elements = [];
+    if(arr.length == 0) return "[]";
     for(i = 0; i < arr.length; i++) {
       elements.push(inspect(arr[i]));
     }
