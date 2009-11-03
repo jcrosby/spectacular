@@ -208,5 +208,7 @@ process.mixin(require('sys'));
     }
   }
   puts("\n");
-  summarize();
+  process.addListener("exit", function () {
+    summarize();
+  });
 })();
