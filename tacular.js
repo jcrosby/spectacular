@@ -40,6 +40,14 @@
  *     setTimeout(function(){ promise.emitSuccess() }, 500);
  *   });
  *
+ *   // Supply a name, timeout and function.  Only used in the async case
+ *
+ *   it("should fail a timeout", 300, function(promise){
+ *     promise.addCallback(function(){
+ *       assert(true);
+ *     })
+ *     setTimeout(function(){ promise.emitSuccess() }, 1000);
+ *   });
  * });
  *
  * Copyright 2009, Jon Crosby, MIT Licensed
@@ -65,6 +73,13 @@ process.mixin(require('sys'));
   };
 
   var it = function(name, func) {
+    var timeout = undefined;
+
+    if(arguments.length == 3){
+      timeout = func;
+      func    = arguments[2];
+    }
+
     specCount++;
     specStack.push(name);
     if (specVerbose) print("\n  "+name+" : ");
@@ -74,8 +89,11 @@ process.mixin(require('sys'));
         func();
       } else {
         var promise = new process.Promise();
+
+        if(timeout)
+          promise.timeout(timeout);
+
         func(promise);
-        promise.addErrback(function(e){ throw e });
         promise.wait();
       }
     }
