@@ -27,4 +27,14 @@ describe("A test", function(){
   it("Should pass simple sync tests after async ones", function(){
     assert(true);
   });
+
+  it("should handle assertions for raised exceptions", function() {
+    assertRaise('SpectacularError', function() {
+      function SpectacularError(message) {
+        this.name = 'SpectacularError';
+        this.message = message;
+      };
+      throw new SpectacularError('this is just spectacular');
+    });
+  });
 });
