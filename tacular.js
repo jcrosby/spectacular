@@ -179,6 +179,16 @@ process.mixin(require('sys'));
     debugA != debugB ? specPass() : specFail("Expected:\n" + debugA + "\n\nto not equal:\n" + debugB);
   };
 
+  var assertRaise = function(exception, func) {
+    try {
+      func();
+      throw new Error('no exception was raised');
+    } catch(e) { 
+      if (e.name == exception) specPass();
+      else specFail("Expected:\n" + exception + " to be raised\n\n" + e.name + " was raised instead with " + e.message);
+    }
+  };
+
   var beforeEach = function(func) {
     specBeforeEach = func;
   };
